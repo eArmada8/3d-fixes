@@ -271,10 +271,14 @@ def save_shader_index():
 def get_posts():
     updated = get_blog_updated()
     if os.path.exists('POSTS.JSON'):
-        j = json.load(open('POSTS.JSON', 'r', encoding='utf-8'))
-        if updated == j['updated']:
-            print('Blog updated timestamp unchanged - using cached POSTS.JSON')
-            return j['posts']
+        try:
+            j = json.load(open('POSTS.JSON', 'r', encoding='utf-8'))
+        except:
+            print('Error loading POSTS.JSON, discarding')
+        else:
+            if updated == j['updated']:
+                print('Blog updated timestamp unchanged - using cached POSTS.JSON')
+                return j['posts']
     print('Fetching blog posts...')
     posts = get_blog_posts()
     j = {'updated': updated, 'posts': posts}
